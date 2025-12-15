@@ -36,7 +36,7 @@ jobs:
           mkdir -p public
 
           # ZIPs aus main
-          cd main
+          cd aufgaben
           for d in */ ; do
             case "$d" in
               ".git/"|".github/") continue ;;
