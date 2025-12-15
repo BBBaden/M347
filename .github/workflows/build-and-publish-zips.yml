@@ -43,7 +43,7 @@ jobs:
             esac
             dirname="${d%/}"
             echo "Erstelle ZIP (main) für: $dirname"
-            zip -r "../public/${dirname}_main.zip" "$dirname"
+            zip -r "../public/${dirname}.zip" "$dirname"
           done
           cd ..
 
@@ -55,7 +55,7 @@ jobs:
             esac
             dirname="${d%/}"
             echo "Erstelle ZIP (loesungen) für: $dirname"
-            zip -r "../public/${dirname}_loesungen.zip" "$dirname"
+            zip -r "../public/${dirname}.zip" "$dirname"
           done
           cd ..
 
