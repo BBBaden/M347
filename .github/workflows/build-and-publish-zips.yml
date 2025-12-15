@@ -1,7 +1,7 @@
-name: Build ZIPs and publish to GitHub Pages
+name: Build ZIPs (main + loesungen) and publish to GitHub Pages
 
 on:
-  workflow_dispatch:  # manueller Start per Button
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,20 +17,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # main-Branch in ./main auschecken
+      - name: Checkout main
         uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
 
-      - name: Create ZIPs for top-level folders
+      # loesungen-Branch in ./loesungen auschecken
+      - name: Checkout loesungen
+        uses: actions/checkout@v4
+        with:
+          ref: loesungen
+          path: loesungen
+
+      - name: Create ZIPs for top-level folders (main + loesungen)
         run: |
           mkdir -p public
+
+          # ZIPs aus main
+          cd main
           for d in */ ; do
             case "$d" in
-              ".git/"|".github/"|"public/") continue ;;
+              ".git/"|".github/") continue ;;
             esac
             dirname="${d%/}"
-            echo "Erstelle ZIP für: $dirname"
-            zip -r "public/${dirname}.zip" "$dirname"
+            echo "Erstelle ZIP (main) für: $dirname"
+            zip -r "../public/${dirname}_main.zip" "$dirname"
           done
+          cd ..
+
+          # ZIPs aus loesungen
+          cd loesungen
+          for d in */ ; do
+            case "$d" in
+              ".git/"|".github/") continue ;;
+            esac
+            dirname="${d%/}"
+            echo "Erstelle ZIP (loesungen) für: $dirname"
+            zip -r "../public/${dirname}_loesungen.zip" "$dirname"
+          done
+          cd ..
 
       - name: Create simple index.html
         run: |
