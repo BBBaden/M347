@@ -18,11 +18,11 @@ jobs:
 
     steps:
       # main-Branch in ./main auschecken
-      - name: Checkout main
+      - name: Checkout aufgaben
         uses: actions/checkout@v4
         with:
-          ref: main
-          path: main
+          ref: aufgaben
+          path: aufgaben
 
       # loesungen-Branch in ./loesungen auschecken
       - name: Checkout loesungen
