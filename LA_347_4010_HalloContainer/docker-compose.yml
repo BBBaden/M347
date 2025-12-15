@@ -1,0 +1,10 @@
+services:
+  LA_347_4009_ErsterContainer:
+    image: fabricethutbbbaden/la_347_4009_erstercontainer
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      x-bake:
+        platforms:
+          - linux/amd64
+          - linux/arm64
