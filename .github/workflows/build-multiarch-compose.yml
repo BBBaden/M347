@@ -1,4 +1,4 @@
-name: Build + Push multi-arch (compose + bake)
+name: Build un Push multi-arch (compose and bake)
 
 on:
   workflow_dispatch:        # zusätzlich manuell startbar
