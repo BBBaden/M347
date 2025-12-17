@@ -1,8 +1,6 @@
 name: Build & Push multi-arch (compose + bake)
 
 on:
-  push:
-    branches: [ main ]     # Workflow wird bei Push auf main gestartet
   workflow_dispatch:        # zusätzlich manuell startbar
 
 jobs:
