@@ -2,8 +2,8 @@ name: Build & Push multi-arch (compose + bake)
 
 on:
   push:
-    branches: [ loesungen ]
-  workflow_dispatch:
+    branches: [ main ]     # Workflow wird bei Push auf main gestartet
+  workflow_dispatch:        # zusätzlich manuell startbar
 
 jobs:
   build-and-push:
@@ -12,30 +12,58 @@ jobs:
     strategy:
       matrix:
         service-dir:
+          # HIER deine Ordner relativ zum Repo-Root eintragen
           - LA_347_4010_HalloContainer_L
-          # hier alle Ordner mit docker-compose.yml eintragen
+          # - LA_347_4011_Irgendwas
+          # - unterordner/noch_ein_container
 
     steps:
-      - name: Checkout
+      # 1) Branch "loesungen" auschecken
+      - name: Checkout branch loesungen
         uses: actions/checkout@v4
+        with:
+          ref: loesungen
 
+      # 2) Debug: Struktur anzeigen
+      - name: Debug: Verzeichnisstruktur
+        run: |
+          echo "Aktuelles Verzeichnis:"
+          pwd
+          echo "Inhalt:"
+          ls -R
+
+      # 3) Debug: Matrix-Wert & Ordnerinhalt
+      - name: Debug: Service-Ordner prüfen
+        run: |
+          echo "Matrix service-dir: ${{ matrix.service-dir }}"
+          echo "Inhalt von ${{ matrix.service-dir }}:"
+          ls -R "${{ matrix.service-dir }}"
+
+      # 4) QEMU für Multi-Arch
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
+      # 5) Buildx einrichten
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
           install: true
 
+      # 6) Login bei Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME_M347 }}
           password: ${{ secrets.DOCKERHUB_TOKEN_M347 }}
 
+      # 7) Build & Push mit docker buildx bake auf Basis der docker-compose.yml
       - name: Build & push via docker buildx bake
-        working-directory: ./${{ matrix.service-dir }}
+        working-directory: ${{ matrix.service-dir }}
         run: |
+          echo "Arbeitsverzeichnis:"
+          pwd
+          echo "Inhalt:"
+          ls
           docker buildx bake \
             --file docker-compose.yml \
             --push
