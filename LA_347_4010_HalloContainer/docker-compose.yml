@@ -1,6 +1,6 @@
 services:
   LA_347_4009_ErsterContainer:
-    image: fabricethutbbbaden/la_347_4009_erstercontainer
+    image: fabricethutbbbaden/la_347_4010_erstercontainer
     build:
       context: ./
       dockerfile: Dockerfile
